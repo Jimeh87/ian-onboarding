@@ -17,7 +17,6 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "user")
 @Getter
-@Setter
 @Accessors(chain = true)
 @EqualsAndHashCode(of = "id")
 public class User {
@@ -26,19 +25,25 @@ public class User {
 	@Type(type = "uuid-char")
 	@Column(name = "user_id")
 	private UUID id;
+	
+	@Column(name = "username")
+	private String username;
 
 	@Column(name = "first_name")
+	@Setter
 	private String firstName;
 
 	@Column(name = "last_name")
+	@Setter
 	private String lastName;
 
 	User() {
 	}
 
-	public static User newInstance() {
+	public static User newInstance(String username) {
 		User user = new User();
 		user.id = UUID.randomUUID();
+		user.username = username;
 		return user;
 	}
 

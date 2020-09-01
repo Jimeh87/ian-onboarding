@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserDto {
 	private UUID id;
+	private String username;
 	private String firstName;
 	private String lastName;
 }
