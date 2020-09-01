@@ -4,12 +4,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ianonboarding.user.controller.UserDto;
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class UserValidator {
+	
+	private UserRepository userRepository;
 
 	public void validateAndThrow(UserDto userDto) {
 		Map<String, String> errors = validate(userDto);
@@ -24,10 +29,10 @@ public class UserValidator {
 		Map<String, String> errors = new LinkedHashMap<>();
 		if (StringUtils.isBlank(userDto.getUsername())) {
 			errors.put("username", "REQUIRED");
-		}
-
-		if (StringUtils.length(userDto.getUsername()) > 20) {
+		} else if (StringUtils.length(userDto.getUsername()) > 20) {
 			errors.put("username", "INVALID_LENGTH");
+		} else if (userRepository.existsByUsername(userDto.getUsername())) {
+			errors.put("username", "NOT_UNIQUE");
 		}
 
 		if (StringUtils.isBlank(userDto.getFirstName())) {

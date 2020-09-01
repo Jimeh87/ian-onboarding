@@ -22,6 +22,7 @@ public class UserApplication {
 
 	  //add validation for unique username (hint existsByUsername in repository - inject repository into validator).
 	  //and write tests in UserValidatorTest for unique username (hint Mockito.mock(UserRepository.class), Mockito.when(repository.existsByUsername))
+	  //and make sure it works for update as well
 
 	  //add a phone table, entity, dto, service, controller, assembler etc and make phone a subresource of user.
 	  //add controller and validator tests for the phone subresource
