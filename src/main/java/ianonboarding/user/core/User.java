@@ -36,6 +36,7 @@ public class User {
 	@Column(name = "last_name")
 	@Setter
 	private String lastName;
+	
 
 	User() {
 	}

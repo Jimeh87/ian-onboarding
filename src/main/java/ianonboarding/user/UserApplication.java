@@ -19,6 +19,8 @@ public class UserApplication {
 	}
 	
 	//Things to work on
+	
+	// finish put and delete controller tests
 
 	  //add validation for unique username (hint existsByUsername in repository - inject repository into validator).
 	  //and write tests in UserValidatorTest for unique username (hint Mockito.mock(UserRepository.class), Mockito.when(repository.existsByUsername))
