@@ -21,6 +21,10 @@ public class UserService {
 		return userRepository.getOne(id);
 	}
 	
+	public List<User> getUsersByLastName(String lastName){
+		return userRepository.findUsersByLastNameIgnoreCase(lastName);
+	}
+	
 	public Optional<User> findUser(UUID id) {
 		return userRepository.findById(id);
 	}
