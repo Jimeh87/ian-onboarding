@@ -85,7 +85,9 @@ public class UserControllerTest {
 		assertEquals(2, response.getBody().length);
 	}
 	
-	// TODO: Add PUT and DELETE tests
+	// TODO: Add PUT tests
+	
+	// TODO: Add DELETE tests
 	
 	private UserDto createUser(UserDto userDto) {
 		return restTemplate.postForEntity("/api/v1/users", userDto, UserDto.class).getBody();
