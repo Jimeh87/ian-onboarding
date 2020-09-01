@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ianonboarding.user.core.User;
 import ianonboarding.user.core.UserService;
+import ianonboarding.user.core.UserValidator;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -25,6 +26,8 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserValidator userValidator;
 	@Autowired
 	private UserDtoAssembler userDtoAssembler;
 	
@@ -45,6 +48,7 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserDto createUser(@RequestBody UserDto userDto) {
+		userValidator.validateAndThrow(userDto);
 		User user = userDtoAssembler.disassemble(userDto);
 		user = userService.save(user);
 		return userDtoAssembler.assemble(user);
@@ -54,6 +58,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
 		userDto.setId(id);
+		userValidator.validateAndThrow(userDto);
 		User user = userDtoAssembler.disassemble(userDto);
 		user = userService.save(user);
 	}

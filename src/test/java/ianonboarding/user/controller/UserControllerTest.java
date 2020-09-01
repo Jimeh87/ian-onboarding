@@ -2,6 +2,8 @@ package ianonboarding.user.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,11 +38,26 @@ public class UserControllerTest {
 				() -> assertEquals(userDto.getLastName(), createdUser.getLastName(), "lastName")
 		);
 	}
+	
+	@Test
+	public void testCreateUser_UsernameIsTooLong_ExpectValidationError() {
+		UserDto userDto = new UserDto()
+				.setUsername("ThisIsTheStoryAllAboutHowMyLifeGotFlippedRightUpSideDown")
+				.setFirstName("Will")
+				.setLastName("Smith");
+		
+		ResponseEntity<Map> response = restTemplate.postForEntity("/api/v1/users", userDto, Map.class);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		
+		Map<String, String> errors = response.getBody();
+		assertEquals(1, errors.size());
+		assertEquals("Invalid length", errors.get("username"));
+	}
 
 	@Test
 	public void testGetUser_OneUser_ExpectUserReturned() {
 		UserDto user = createUser(new UserDto()
-				.setUsername("BadActorMostOfTheTime")
+				.setUsername("BadActor")
 				.setFirstName("Jaden")
 				.setLastName("Smith"));
 		
