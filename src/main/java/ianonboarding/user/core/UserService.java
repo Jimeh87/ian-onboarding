@@ -37,4 +37,13 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 	
+	public boolean userNameExists(String username, UUID id) {
+		if(id == null) {
+			return userRepository.existsByUsername(username);
+		}
+		else {
+			return userRepository.existsByUsernameAndIdNot(username, id);
+		}
+	}
+	
 }

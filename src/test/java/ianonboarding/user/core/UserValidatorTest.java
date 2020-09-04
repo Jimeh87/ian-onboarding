@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 import ianonboarding.user.controller.UserDto;
 
 public class UserValidatorTest {
-
-	private UserRepository userRepository = mock(UserRepository.class);
-	private UserValidator userValidator = new UserValidator(userRepository);
+	
+	private UserService userService = mock(UserService.class);
+	private UserValidator userValidator = new UserValidator(userService);
 
 	@Test
 	public void testValidate_NoUsername_ExpectUsernameRequired() {
-		when(userRepository.existsByUsername(any())).thenReturn(false);
+		when(userService.userNameExists(any(), any())).thenReturn(false);
 		UserDto userDto = new UserDto()
 				.setUsername(null)
 				.setFirstName("Will")
@@ -33,7 +33,7 @@ public class UserValidatorTest {
 
 	@Test
 	public void testValidate_FirstNameLengthTooLong_ExpectInvalidLength() {
-		when(userRepository.existsByUsername(any())).thenReturn(false);
+		when(userService.userNameExists(any(), any())).thenReturn(false);
 		UserDto user = new UserDto()
 				.setUsername("BadActor")
 				.setFirstName("Jaden".repeat(11))
@@ -46,7 +46,7 @@ public class UserValidatorTest {
 
 	@Test
 	public void testValidateAndThrow_InvalidUsername_ExpectExceptionThrown() {
-		when(userRepository.existsByUsername(any())).thenReturn(false);
+		when(userService.userNameExists(any(), any())).thenReturn(false);
 		UserDto user = new UserDto()
 				.setUsername(" ")
 				.setFirstName("Jaden")
@@ -63,7 +63,7 @@ public class UserValidatorTest {
 
 	@Test
 	public void testValidateAndThrow_InvalidUsername_ExpectExceptionThrown2() {
-		when(userRepository.existsByUsername(any())).thenReturn(false);
+		when(userService.userNameExists(any(), any())).thenReturn(false);
 		UserDto user = new UserDto()
 				.setUsername(" ")
 				.setFirstName("Jaden")
@@ -72,6 +72,34 @@ public class UserValidatorTest {
 		ValidationException e = assertThrows(ValidationException.class, () -> userValidator.validateAndThrow(user));
 		assertEquals("REQUIRED", e.getErrors().get("username"));
 
+	}
+	
+	@Test
+	public void testValidateUniqueUsername_NonUniqueUsername_ExpectNonUniqueExceptionThrown() {
+		when(userService.userNameExists(any(), any())).thenReturn(true);
+		UserDto user = new UserDto()
+				.setUsername("BadActor")
+				.setFirstName("Jaden")
+				.setLastName("Smith");
+		
+		Map<String, String> errorTesting = userValidator.validate(user);
+		assertEquals("NOT_UNIQUE", errorTesting.get("username"));
+	}
+	
+	@Test
+	public void testValidateUniqueUsernameWithUpdate_UpdatingFirstName_ExpectNoExceptionsThrown() {
+		UserDto user = new UserDto()
+				.setUsername("BadActor")
+				.setFirstName("Jaden")
+				.setLastName("Smith");
+		
+		when(userService.userNameExists(user.getUsername(), user.getId())).thenReturn(false);
+
+		user.setFirstName("Lloyd");
+		
+		Map<String, String> errorTesting = userValidator.validate(user);
+		assertEquals("Lloyd", user.getFirstName());
+		assertEquals(null, errorTesting.get("username"));
 	}
 
 }

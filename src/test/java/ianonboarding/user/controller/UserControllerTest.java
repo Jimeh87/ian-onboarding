@@ -3,6 +3,7 @@ package ianonboarding.user.controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +86,36 @@ public class UserControllerTest {
 		assertEquals(2, response.getBody().length);
 	}
 	
-	// TODO: Add PUT tests
+	@Test
+	public void testPut_OneUserNameChanged_ExpectNewNameReturned() {
+		UserDto user = createUser(new UserDto()
+				.setUsername("ItMe")
+				.setFirstName("Ian")
+				.setLastName("Quach"));
+		
+		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
+		restTemplate.put("/api/v1/users/" + user.getId(), user.setFirstName("Lloyd"));
+		response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
+		assertEquals(user.getFirstName(), response.getBody().getFirstName());
+	}
 	
-	// TODO: Add DELETE tests
+	@Test
+	public void testDeleteUser_OneUserDeleted_ExpectZeroUsersReturned() {
+		UserDto user = createUser(new UserDto()
+				.setUsername("ItMe")
+				.setFirstName("Ian")
+				.setLastName("Quach"));
+		
+		ResponseEntity<UserDto[]> response = restTemplate.getForEntity("/api/v1/users/", UserDto[].class); // Returns the user as a UserDto object
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody()); // make sure you're actually receiving the users/that they exist
+		restTemplate.delete("/api/v1/users/" + user.getId(), UserDto.class);
+		response = restTemplate.getForEntity("/api/v1/users/", UserDto[].class);
+		assertEquals(0, response.getBody().length);
+	}
 	
 	private UserDto createUser(UserDto userDto) {
 		return restTemplate.postForEntity("/api/v1/users", userDto, UserDto.class).getBody();
 	}
+
 }

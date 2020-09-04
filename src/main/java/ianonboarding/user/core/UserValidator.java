@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserValidator {
 	
-	private UserRepository userRepository;
+	private UserService userService;
 
 	public void validateAndThrow(UserDto userDto) {
 		Map<String, String> errors = validate(userDto);
@@ -31,7 +31,7 @@ public class UserValidator {
 			errors.put("username", "REQUIRED");
 		} else if (StringUtils.length(userDto.getUsername()) > 20) {
 			errors.put("username", "INVALID_LENGTH");
-		} else if (userRepository.existsByUsername(userDto.getUsername())) {
+		} else if (userService.userNameExists(userDto.getUsername(), userDto.getId())) {
 			errors.put("username", "NOT_UNIQUE");
 		}
 
