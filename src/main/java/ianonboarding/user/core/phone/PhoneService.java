@@ -1,14 +1,11 @@
 package ianonboarding.user.core.phone;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import ianonboarding.user.controller.phoneController.PhoneDto;
 
 @Service
 public class PhoneService {

@@ -12,4 +12,5 @@ public class PhoneDto {
 	private UUID phoneId;
 	private UUID userId;
 	private String phoneNumber;
+	private String primaryNumber;
 }

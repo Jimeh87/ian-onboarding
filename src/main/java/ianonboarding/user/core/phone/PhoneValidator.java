@@ -28,6 +28,11 @@ public class PhoneValidator {
 		Map<String, String> errors = new LinkedHashMap<>();
 		if(StringUtils.isBlank(phoneDto.getPhoneNumber())) {
 			errors.put("phoneNumber", "REQUIRED");
+		} else if (StringUtils.length(phoneDto.getPhoneNumber()) > 10) {
+			errors.put("phoneNumber", "INVALID_LENGTH");
+		}
+		if(StringUtils.isBlank(phoneDto.getPrimaryNumber())) {
+			errors.put("primaryNumber", "REQUIRED");
 		}
 		return errors;
 	}

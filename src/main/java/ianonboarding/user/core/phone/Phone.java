@@ -9,7 +9,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import ianonboarding.user.controller.UserDto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +33,10 @@ public class Phone {
 	@Column(name = "phone_number")
 	@Setter
 	private String phoneNumber;
+	
+	@Column(name = "primary_number")
+	@Setter
+	private String primaryNumber;
 
 	Phone() {
 	}

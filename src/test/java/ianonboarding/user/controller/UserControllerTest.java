@@ -94,6 +94,7 @@ public class UserControllerTest {
 				.setLastName("Quach"));
 		
 		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
+		user = response.getBody();
 		restTemplate.put("/api/v1/users/" + user.getId(), user.setFirstName("Lloyd"));
 		response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
 		assertEquals(user.getFirstName(), response.getBody().getFirstName());

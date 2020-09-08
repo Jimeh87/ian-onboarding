@@ -42,7 +42,6 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -69,6 +68,12 @@
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>7.55.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

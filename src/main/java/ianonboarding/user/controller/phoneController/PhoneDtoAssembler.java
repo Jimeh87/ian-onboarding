@@ -16,7 +16,8 @@ public class PhoneDtoAssembler {
 		return new PhoneDto()
 				.setPhoneId(phone.getPhoneId())
 				.setUserId(phone.getUserId())
-				.setPhoneNumber(phone.getPhoneNumber());
+				.setPhoneNumber(phone.getPhoneNumber())
+				.setPrimaryNumber(phone.getPrimaryNumber());
 	}
 	
 	public Phone disassemble(PhoneDto phoneDto) {
@@ -25,6 +26,7 @@ public class PhoneDtoAssembler {
 				: Phone.newInstance(phoneDto.getUserId());
 				
 		return phone
-				.setPhoneNumber(phoneDto.getPhoneNumber());
+				.setPhoneNumber(phoneDto.getPhoneNumber())
+				.setPrimaryNumber(phoneDto.getPrimaryNumber());
 	}
 }
