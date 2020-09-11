@@ -30,8 +30,9 @@ public class PhoneControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		PhoneDto createdPhone = new PhoneDto()
-				.setUserId(response.getBody().getId())
-				.setPhoneNumber("5551234567");
+				.setUserId(createdUser.getId())
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(true);
 		
 		ResponseEntity<PhoneDto> phoneResponse = restTemplate.postForEntity("/api/v1/users/" + createdUser.getId() + "/phones", createdPhone, PhoneDto.class);
 		assertEquals(HttpStatus.CREATED, phoneResponse.getStatusCode());
@@ -49,13 +50,13 @@ public class PhoneControllerTest {
 		
 		PhoneDto createdPhone = new PhoneDto()
 				.setUserId(createdUser.getId())
-				.setPhoneNumber("5551234567");
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(false);
 		
 		ResponseEntity<PhoneDto> phoneResponse = restTemplate.postForEntity("/api/v1/users/" + createdUser.getId() + "/phones", createdPhone, PhoneDto.class);
 		assertEquals(HttpStatus.CREATED, phoneResponse.getStatusCode());
 		createdPhone = phoneResponse.getBody();
-		
-		assertNotNull(restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), PhoneDto.class));
+		assertNotNull(restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneNumber(), PhoneDto.class));
 	}
 	
 	@Test
@@ -70,10 +71,12 @@ public class PhoneControllerTest {
 		
 		createPhone(createdUser, new PhoneDto()
 				.setUserId(createdUser.getId())
-				.setPhoneNumber("5551234567"));
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(true));
 		createPhone(createdUser, new PhoneDto()
 				.setUserId(createdUser.getId())
-				.setPhoneNumber("6661234567"));
+				.setPhoneNumber("6661234567")
+				.setPrimaryNumber(true));
 		
 		ResponseEntity<PhoneDto[]> phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/", PhoneDto[].class);
 		assertEquals(HttpStatus.OK, phoneResponse.getStatusCode());
@@ -93,18 +96,18 @@ public class PhoneControllerTest {
 		
 		PhoneDto createdPhone = new PhoneDto()
 				.setUserId(createdUser.getId())
-				.setPhoneNumber("5551234567");
-		
-		ResponseEntity<PhoneDto> phoneResponse = restTemplate.postForEntity("/api/v1/users/" + createdUser.getId() + "/phones", createdPhone, PhoneDto.class);
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(false);
+
+		ResponseEntity<PhoneDto> phoneResponse = restTemplate.postForEntity("/api/v1/users/" + createdUser.getId() + "/phones/", createdPhone, PhoneDto.class);
 		assertEquals(HttpStatus.CREATED, phoneResponse.getStatusCode());
 		createdPhone = phoneResponse.getBody();
 		
 		restTemplate.put("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), createdPhone.setPhoneNumber("6661234567"));
 		phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdPhone.getUserId() + "/phones/" + createdPhone.getPhoneId(), PhoneDto.class);
 		assertEquals(createdPhone.getPhoneNumber(), phoneResponse.getBody().getPhoneNumber());
-		
 	}
-	
+
 	@Test
 	public void testPutPrimaryPhoneNumber_SetPrimaryPhone_ExpectPrimaryPhoneNumberReturned() {
 		UserDto createdUser = createUser(new UserDto()
@@ -114,13 +117,36 @@ public class PhoneControllerTest {
 		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + createdUser.getId(), UserDto.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		PhoneDto createdPhone = createPhone(createdUser, new PhoneDto()
+		PhoneDto createdPhone = new PhoneDto()
 				.setUserId(createdUser.getId())
-				.setPhoneNumber("5551234567"));
-		ResponseEntity<PhoneDto> phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), PhoneDto.class);
-		restTemplate.put("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), createdPhone.setPrimaryNumber("y"));
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(false);
+		ResponseEntity<PhoneDto> phoneResponse = restTemplate.postForEntity("/api/v1/users/" + createdUser.getId() + "/phones", createdPhone, PhoneDto.class);
+		assertEquals(HttpStatus.CREATED, phoneResponse.getStatusCode());
+		createdPhone = phoneResponse.getBody();
+		
+		restTemplate.put("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), createdPhone.setPrimaryNumber(true));
 		phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdPhone.getUserId() + "/phones/" + createdPhone.getPhoneId(), PhoneDto.class);
-		assertEquals("y", phoneResponse.getBody().getPrimaryNumber());
+		assertEquals(true, phoneResponse.getBody().getPrimaryNumber());
+	}
+	
+	@Test
+	public void testDeletePhone_OnePhoneDeleted_ExpectZeroPhonesReturned() {
+		UserDto createdUser = createUser(new UserDto()
+				.setUsername("BigWillyStyle")
+				.setFirstName("Will")
+				.setLastName("Smith"));
+		
+		PhoneDto createdPhone = createPhone(createdUser,new PhoneDto()
+				.setUserId(createdUser.getId())
+				.setPhoneNumber("5551234567")
+				.setPrimaryNumber(false));
+		ResponseEntity<PhoneDto[]> phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/", PhoneDto[].class); // Returns the user as a UserDto object
+		assertEquals(HttpStatus.OK, phoneResponse.getStatusCode());
+		assertNotNull(phoneResponse.getBody()); // make sure you're actually receiving the users/that they exist
+		restTemplate.delete("/api/v1/users/" + createdUser.getId() + "/phones/" + createdPhone.getPhoneId(), PhoneDto.class);
+		phoneResponse = restTemplate.getForEntity("/api/v1/users/" + createdUser.getId() + "/phones/", PhoneDto[].class); // Returns the user as a UserDto object
+		assertEquals(0, phoneResponse.getBody().length);
 	}
 	
 	private UserDto createUser(UserDto userDto) {
