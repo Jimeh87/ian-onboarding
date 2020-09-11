@@ -36,7 +36,11 @@ public class Phone {
 	
 	@Column(name = "primary_number")
 	@Setter
-	private String primaryNumber;
+	private Boolean primaryNumber;
+	
+	@Column(name = "verification_twilio")
+	@Setter
+	private Boolean verificationTwilio;
 
 	Phone() {
 	}
@@ -45,6 +49,8 @@ public class Phone {
 		Phone phone = new Phone();
 		phone.phoneId = UUID.randomUUID();
 		phone.userId = userId;
+		phone.primaryNumber = false;
+		phone.verificationTwilio = false;
 		return phone;
 	}
 }

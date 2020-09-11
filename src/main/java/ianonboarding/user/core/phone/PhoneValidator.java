@@ -14,8 +14,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PhoneValidator {
 	
-	private PhoneService phoneService;
-	
 	public void validateAndThrow(PhoneDto phoneDto) {
 		Map<String, String> errors = validate(phoneDto);
 		
@@ -31,10 +29,6 @@ public class PhoneValidator {
 		} else if (StringUtils.length(phoneDto.getPhoneNumber()) > 10) {
 			errors.put("phoneNumber", "INVALID_LENGTH");
 		}
-		if(StringUtils.isBlank(phoneDto.getPrimaryNumber())) {
-			errors.put("primaryNumber", "REQUIRED");
-		}
 		return errors;
 	}
-
 }

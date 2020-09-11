@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ianonboarding.user.core.phone.Phone;
+import ianonboarding.user.core.phone.PhoneRepository;
 import ianonboarding.user.core.phone.PhoneService;
 import ianonboarding.user.core.phone.PhoneValidator;
 
@@ -29,6 +31,8 @@ public class PhoneController {
 	private PhoneValidator phoneValidator;
 	@Autowired
 	private PhoneDtoAssembler phoneDtoAssembler;
+	@Autowired
+	private PhoneRepository phoneRepository;
 	
 	@GetMapping("/{phoneId}")
 	public PhoneDto getPhone(@PathVariable("phoneId") UUID phoneId) {
@@ -49,6 +53,13 @@ public class PhoneController {
 	public PhoneDto createPhone(@PathVariable("userId") UUID userId, @RequestBody PhoneDto phoneDto) {
 		phoneDto.setUserId(userId);
 		phoneValidator.validateAndThrow(phoneDto);
+		
+		// received from Duane
+		if(phoneDto.getPrimaryNumber()) { // if you get true for the Primary number then set ever other phone number in their list to be false for a primary number
+			phoneRepository.findPhonesByUserId(phoneDto.getUserId()).forEach(p -> p.setPrimaryNumber(false));
+		} else {
+			phoneDto.setPrimaryNumber(false);
+		}
 		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
 		phone = phoneService.save(phone);
 		return phoneDtoAssembler.assemble(phone);
@@ -60,7 +71,35 @@ public class PhoneController {
 		phoneDto.setUserId(userId);
 		phoneDto.setPhoneId(phoneId);
 		phoneValidator.validateAndThrow(phoneDto);
+		if(phoneDto.getPrimaryNumber()) {
+			phoneRepository.findPhonesByUserId(phoneDto.getUserId()).forEach(p -> p.setPrimaryNumber(false));
+		} else {
+			phoneDto.setPrimaryNumber(false);
+		}
+		if(phoneDto.getVerificationTwilio()) {
+			phoneDto.setVerificationTwilio(true);
+		} else {
+			phoneDto.setVerificationTwilio(false);
+		}
 		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
 		phone = phoneService.save(phone);
 	}
+	
+	@DeleteMapping("{phoneId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUser(@PathVariable("phoneId") UUID phoneId) {
+		phoneService.delete(phoneId);
+	}
+//public PhoneDto create(PhoneDto dto) {
+//  phoneValidator.validateAndThrow(dto);
+//
+//  if(dto.getPrimaryPhoneNumber()) {
+//      phoneRepository.findAllByUserId(dto.getUserId()).forEach(p -> p.setPrimaryPhoneNumber(false));
+//  }
+//
+//  Phone entity = phoneAssembler.disassemble(dto);
+//  phoneRepository.save(entity);
+//  return phoneAssembler.assemble(entity);
+//}
+
 }

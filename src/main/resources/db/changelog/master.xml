@@ -16,7 +16,8 @@
         	<column name="phone_id" type="varchar(36)"/>
             <column name="user_id" type="varchar(36)"/>
             <column name="phone_number" type="varchar(11)"/>
-            <column name="primary_number" type="varchar(1)" defaultValue="n"/>
+         	<column name="primary_number" type="Boolean"/>
+         	<column name="verification_twilio" type="Boolean"/>
         </createTable>
     </changeSet>
 

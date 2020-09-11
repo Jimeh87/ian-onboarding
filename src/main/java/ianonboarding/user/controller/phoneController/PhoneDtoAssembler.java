@@ -17,16 +17,25 @@ public class PhoneDtoAssembler {
 				.setPhoneId(phone.getPhoneId())
 				.setUserId(phone.getUserId())
 				.setPhoneNumber(phone.getPhoneNumber())
-				.setPrimaryNumber(phone.getPrimaryNumber());
+				.setPrimaryNumber(phone.getPrimaryNumber())
+				.setVerificationTwilio(phone.getVerificationTwilio());
 	}
 	
 	public Phone disassemble(PhoneDto phoneDto) {
 		Phone phone = phoneDto.getPhoneId() != null
 				? phoneService.getPhone(phoneDto.getPhoneId())
 				: Phone.newInstance(phoneDto.getUserId());
-				
-		return phone
-				.setPhoneNumber(phoneDto.getPhoneNumber())
-				.setPrimaryNumber(phoneDto.getPrimaryNumber());
+					
+			if(phoneDto.getVerificationTwilio() == null) {
+				return phone
+						.setPhoneNumber(phoneDto.getPhoneNumber())
+						.setPrimaryNumber(phoneDto.getPrimaryNumber());
+			} else {
+				return phone
+						.setPhoneNumber(phoneDto.getPhoneNumber())
+						.setPrimaryNumber(phoneDto.getPrimaryNumber())
+						.setVerificationTwilio(phoneDto.getVerificationTwilio());
+			}
+			
 	}
 }

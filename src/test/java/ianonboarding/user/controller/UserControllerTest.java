@@ -1,9 +1,10 @@
 package ianonboarding.user.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,6 @@ public class UserControllerTest {
 				.setLastName("Quach"));
 		
 		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
-		user = response.getBody();
 		restTemplate.put("/api/v1/users/" + user.getId(), user.setFirstName("Lloyd"));
 		response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
 		assertEquals(user.getFirstName(), response.getBody().getFirstName());
