@@ -76,9 +76,7 @@ public class PhoneController {
 		} else {
 			phoneDto.setPrimaryNumber(false);
 		}
-		if(phoneDto.getVerificationTwilio()) {
-			phoneDto.setVerificationTwilio(true);
-		} else {
+		if(!phoneDto.getVerificationTwilio()) {
 			phoneDto.setVerificationTwilio(false);
 		}
 		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
@@ -90,16 +88,5 @@ public class PhoneController {
 	public void deleteUser(@PathVariable("phoneId") UUID phoneId) {
 		phoneService.delete(phoneId);
 	}
-//public PhoneDto create(PhoneDto dto) {
-//  phoneValidator.validateAndThrow(dto);
-//
-//  if(dto.getPrimaryPhoneNumber()) {
-//      phoneRepository.findAllByUserId(dto.getUserId()).forEach(p -> p.setPrimaryPhoneNumber(false));
-//  }
-//
-//  Phone entity = phoneAssembler.disassemble(dto);
-//  phoneRepository.save(entity);
-//  return phoneAssembler.assemble(entity);
-//}
 
 }
