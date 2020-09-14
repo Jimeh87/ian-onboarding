@@ -13,8 +13,8 @@ import org.springframework.test.context.jdbc.Sql;
 import com.twilio.rest.verify.v2.Service;
 import com.twilio.rest.verify.v2.service.Verification;
 
-import ianonboarding.user.controller.UserDto;
-import ianonboarding.user.controller.phoneController.PhoneDto;
+import ianonboarding.user.controller.phone.PhoneDto;
+import ianonboarding.user.controller.user.UserDto;
 import ianonboarding.user.verfication.TwilioVerification;
 
 

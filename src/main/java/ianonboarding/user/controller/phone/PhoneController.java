@@ -1,4 +1,4 @@
-package ianonboarding.user.controller.phoneController;
+package ianonboarding.user.controller.phone;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -54,34 +53,23 @@ public class PhoneController {
 		phoneDto.setUserId(userId);
 		phoneValidator.validateAndThrow(phoneDto);
 		
-		// received from Duane
-		if(phoneDto.getPrimaryNumber()) { // if you get true for the Primary number then set ever other phone number in their list to be false for a primary number
-			phoneRepository.findPhonesByUserId(phoneDto.getUserId()).forEach(p -> p.setPrimaryNumber(false));
-		} else {
-			phoneDto.setPrimaryNumber(false);
-		}
 		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
 		phone = phoneService.save(phone);
 		return phoneDtoAssembler.assemble(phone);
 	}
 	
-	@PutMapping("{phoneId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updatePhoneNumber(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId, @RequestBody PhoneDto phoneDto) {
-		phoneDto.setUserId(userId);
-		phoneDto.setPhoneId(phoneId);
-		phoneValidator.validateAndThrow(phoneDto);
-		if(phoneDto.getPrimaryNumber()) {
-			phoneRepository.findPhonesByUserId(phoneDto.getUserId()).forEach(p -> p.setPrimaryNumber(false));
-		} else {
-			phoneDto.setPrimaryNumber(false);
-		}
-		if(!phoneDto.getVerificationTwilio()) {
-			phoneDto.setVerificationTwilio(false);
-		}
-		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
-		phone = phoneService.save(phone);
+	@PostMapping("{phoneId}/primary")
+	public void verifyPhone(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId) {
+//		phoneService.makePrimary(userId, phoneId);
+		// Mark all other phones under user as not primary
 	}
+	
+	
+//	@PostMapping("{phoneId}/verify")
+//	public PhoneDto verifyPhone(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId, @RequestBody VerificationDto verificationDto) {
+////		phoneService.verify(phoneId, verificationDto);
+//	}
+	
 	
 	@DeleteMapping("{phoneId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

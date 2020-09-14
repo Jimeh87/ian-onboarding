@@ -11,7 +11,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import ianonboarding.user.controller.UserDto;
+import ianonboarding.user.controller.user.UserDto;
+import ianonboarding.user.core.user.UserService;
+import ianonboarding.user.core.user.UserValidator;
 
 public class UserValidatorTest {
 	

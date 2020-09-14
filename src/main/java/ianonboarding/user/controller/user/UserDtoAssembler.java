@@ -1,10 +1,10 @@
-package ianonboarding.user.controller;
+package ianonboarding.user.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ianonboarding.user.core.User;
-import ianonboarding.user.core.UserService;
+import ianonboarding.user.core.user.User;
+import ianonboarding.user.core.user.UserService;
 
 @Component
 public class UserDtoAssembler {

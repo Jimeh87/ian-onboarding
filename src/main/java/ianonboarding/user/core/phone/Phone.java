@@ -45,10 +45,11 @@ public class Phone {
 	Phone() {
 	}
 
-	public static Phone newInstance(UUID userId) {
+	public static Phone newInstance(UUID userId, String phoneNumber) {
 		Phone phone = new Phone();
 		phone.phoneId = UUID.randomUUID();
 		phone.userId = userId;
+		phone.phoneNumber = phoneNumber;
 		phone.primaryNumber = false;
 		phone.verificationTwilio = false;
 		return phone;

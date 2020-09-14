@@ -1,4 +1,4 @@
-package ianonboarding.user.controller;
+package ianonboarding.user.controller.user;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import ianonboarding.user.core.User;
-import ianonboarding.user.core.UserService;
-import ianonboarding.user.core.UserValidator;
+import ianonboarding.user.core.user.User;
+import ianonboarding.user.core.user.UserService;
+import ianonboarding.user.core.user.UserValidator;
 
 @RestController
 @RequestMapping("/api/v1/users")

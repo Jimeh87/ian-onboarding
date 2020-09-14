@@ -1,4 +1,4 @@
-package ianonboarding.user.controller.phoneController;
+package ianonboarding.user.controller.phone;
 
 import java.util.UUID;
 

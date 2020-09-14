@@ -2,16 +2,19 @@ package ianonboarding.user.verfication;
 
 import java.util.Scanner;
 
+import org.springframework.stereotype.Component;
+
 import com.twilio.Twilio;
 import com.twilio.rest.verify.v2.Service;
 import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
 
-import ianonboarding.user.controller.phoneController.PhoneDto;
+import ianonboarding.user.controller.phone.PhoneDto;
 
+@Component
 public class TwilioVerification {
-	public static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
-    public static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
+	private static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
+    private static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
     
     public TwilioVerification(){
     	Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
@@ -24,6 +27,15 @@ public class TwilioVerification {
         System.out.println(service.getAccountSid());
         return service;
     }
+    
+    // only exposed methods.. make the other ones private
+//    public String sendVerificationCode(String phoneNumber) {
+//    	
+//    }
+//    
+//    public void verify(String phoneNumber, String verificationCode) {
+//    	
+//    }
     
     // Verification Setup https://www.twilio.com/docs/verify/api/verification?code-sample=code-start-a-verification-with-sms&code-language=Java&code-sdk-version=7.x
     public Verification verificationSetup(Service service, PhoneDto phoneDto) {

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import ianonboarding.user.controller.phoneController.PhoneDto;
+import ianonboarding.user.controller.phone.PhoneDto;
 import ianonboarding.user.core.ValidationException;
 import lombok.AllArgsConstructor;
 

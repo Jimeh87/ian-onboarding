@@ -26,7 +26,13 @@ public class PhoneService {
 	}
 	
 	public Phone save(Phone phone) {
+		// sent phone verification via twillio
+		// if no phones are on user make this phone primary
 		return phoneRepository.save(phone);
+	}
+	
+	public void verify(UUID id, String verificationCode) {
+		// twillioVerification.verificationCheck();
 	}
 	
 	public void delete (UUID id) {

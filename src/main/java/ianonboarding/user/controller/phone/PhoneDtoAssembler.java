@@ -1,4 +1,4 @@
-package ianonboarding.user.controller.phoneController;
+package ianonboarding.user.controller.phone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,20 +22,6 @@ public class PhoneDtoAssembler {
 	}
 	
 	public Phone disassemble(PhoneDto phoneDto) {
-		Phone phone = phoneDto.getPhoneId() != null
-				? phoneService.getPhone(phoneDto.getPhoneId())
-				: Phone.newInstance(phoneDto.getUserId());
-					
-			if(phoneDto.getVerificationTwilio() == null) {
-				return phone
-						.setPhoneNumber(phoneDto.getPhoneNumber())
-						.setPrimaryNumber(phoneDto.getPrimaryNumber());
-			} else {
-				return phone
-						.setPhoneNumber(phoneDto.getPhoneNumber())
-						.setPrimaryNumber(phoneDto.getPrimaryNumber())
-						.setVerificationTwilio(phoneDto.getVerificationTwilio());
-			}
-			
+		return Phone.newInstance(phoneDto.getUserId(), phoneDto.getPhoneNumber());
 	}
 }

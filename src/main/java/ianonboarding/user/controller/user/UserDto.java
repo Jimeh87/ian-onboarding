@@ -1,4 +1,4 @@
-package ianonboarding.user.controller;
+package ianonboarding.user.controller.user;
 
 import java.util.UUID;
 

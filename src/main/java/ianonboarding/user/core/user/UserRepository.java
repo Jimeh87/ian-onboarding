@@ -1,4 +1,4 @@
-package ianonboarding.user.core;
+package ianonboarding.user.core.user;
 
 import java.util.List;
 import java.util.UUID;
