@@ -32,9 +32,9 @@ public class UserController {
 	@Autowired
 	private UserDtoAssembler userDtoAssembler;
 	
-	@GetMapping("{id}")
-	public UserDto getUser(@PathVariable("id") UUID id) {
-		User user = userService.getUser(id);
+	@GetMapping("{userId}")
+	public UserDto getUser(@PathVariable("userId") UUID userId) {
+		User user = userService.getUser(userId);
 		return userDtoAssembler.assemble(user);
 	}
 	
@@ -63,19 +63,19 @@ public class UserController {
 		return userDtoAssembler.assemble(user);
 	}
 	
-	@PutMapping("{id}")
+	@PutMapping("{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
-		userDto.setId(id);
+	public void updateUser(@PathVariable("userId") UUID userId, @RequestBody UserDto userDto) {
+		userDto.setUserId(userId);
 		userValidator.validateAndThrow(userDto);
 		User user = userDtoAssembler.disassemble(userDto);
 		user = userService.save(user);
 	}
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteUser(@PathVariable("id") UUID id) {
-		userService.delete(id);
+	public void deleteUser(@PathVariable("userId") UUID userId) {
+		userService.delete(userId);
 	}
 	
 }

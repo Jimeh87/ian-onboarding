@@ -18,6 +18,7 @@
             <column name="phone_number" type="varchar(11)"/>
          	<column name="primary_number" type="Boolean"/>
          	<column name="verification_twilio" type="Boolean"/>
+         	<column name="verification_sid" type="varchar(50)"/>
         </createTable>
     </changeSet>
 

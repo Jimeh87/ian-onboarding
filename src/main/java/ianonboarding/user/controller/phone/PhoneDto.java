@@ -14,4 +14,5 @@ public class PhoneDto {
 	private String phoneNumber;
 	private Boolean primaryNumber;
 	private Boolean verificationTwilio;
+	private String verificationSId;
 }

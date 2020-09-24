@@ -30,8 +30,6 @@ public class PhoneController {
 	private PhoneValidator phoneValidator;
 	@Autowired
 	private PhoneDtoAssembler phoneDtoAssembler;
-	@Autowired
-	private PhoneRepository phoneRepository;
 	
 	@GetMapping("/{phoneId}")
 	public PhoneDto getPhone(@PathVariable("phoneId") UUID phoneId) {
@@ -52,22 +50,19 @@ public class PhoneController {
 	public PhoneDto createPhone(@PathVariable("userId") UUID userId, @RequestBody PhoneDto phoneDto) {
 		phoneDto.setUserId(userId);
 		phoneValidator.validateAndThrow(phoneDto);
-		
 		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
 		phone = phoneService.save(phone);
 		return phoneDtoAssembler.assemble(phone);
 	}
 	
-	@PostMapping("{phoneId}/primary")
-	public void verifyPhone(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId) {
-//		phoneService.makePrimary(userId, phoneId);
-		// Mark all other phones under user as not primary
-	}
-	
-	
 //	@PostMapping("{phoneId}/verify")
-//	public PhoneDto verifyPhone(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId, @RequestBody VerificationDto verificationDto) {
-////		phoneService.verify(phoneId, verificationDto);
+//	@ResponseStatus(HttpStatus.ACCEPTED)
+//	public PhoneDto verifyPhone(@PathVariable("userId") UUID userId, @PathVariable("phoneId") UUID phoneId, @RequestBody ValidationDto validationDto, PhoneDto phoneDto) {
+//		phoneDto = getPhone(phoneId);
+//		Phone phone = phoneDtoAssembler.disassemble(phoneDto);
+//		Validation validation = phoneDtoAssembler.disassembleVerification(validationDto);
+//		phone = phoneRepository.save(phone);
+//		return phoneDtoAssembler.assembleVerification(phone, validation);
 //	}
 	
 	

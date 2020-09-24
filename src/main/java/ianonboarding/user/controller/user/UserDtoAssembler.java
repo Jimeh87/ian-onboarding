@@ -15,15 +15,15 @@ public class UserDtoAssembler {
 	
 	public UserDto assemble(User user) {
 		return new UserDto()
-				.setId(user.getId())
+				.setUserId(user.getUserId())
 				.setUsername(user.getUsername())
 				.setFirstName(user.getFirstName())
 				.setLastName(user.getLastName());
 	}
 	
 	public User disassemble(UserDto userDto) {
-		User user = userDto.getId() != null
-				? userService.getUser(userDto.getId())
+		User user = userDto.getUserId() != null
+				? userService.getUser(userDto.getUserId())
 				: User.newInstance(userDto.getUsername());
 		
 		return user

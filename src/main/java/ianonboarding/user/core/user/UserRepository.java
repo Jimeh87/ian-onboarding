@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 	public List<User> findUsersByLastNameIgnoreCase(String lastName);
 	
-	public boolean existsByUsernameAndIdNot(String username, UUID id);
+	public boolean existsByUsernameAndUserIdNot(String username, UUID userId);
 	
 	public boolean existsByUsername(String username);
 	

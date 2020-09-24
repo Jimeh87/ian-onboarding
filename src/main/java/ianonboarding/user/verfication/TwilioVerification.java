@@ -1,15 +1,11 @@
 package ianonboarding.user.verfication;
 
-import java.util.Scanner;
-
 import org.springframework.stereotype.Component;
 
 import com.twilio.Twilio;
 import com.twilio.rest.verify.v2.Service;
 import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
-
-import ianonboarding.user.controller.phone.PhoneDto;
 
 @Component
 public class TwilioVerification {
@@ -21,54 +17,53 @@ public class TwilioVerification {
     	// Creating a new verification service https://www.twilio.com/docs/verify/api/service
     }
     
-    public Service serviceInit() {
+    private Service serviceInit() {
     	Service service = Service.creator("My Verify Service").create();
-        System.out.println(service.getSid());
-        System.out.println(service.getAccountSid());
         return service;
     }
     
     // only exposed methods.. make the other ones private
-//    public String sendVerificationCode(String phoneNumber) {
-//    	
-//    }
-//    
-//    public void verify(String phoneNumber, String verificationCode) {
-//    	
-//    }
+    public String sendVerificationCode(String phoneNumber) {
+//  	to send the verification code
+    	TwilioVerification twilioVerification = new TwilioVerification();
+    	Service service = twilioVerification.serviceInit();
+    	Verification verification = twilioVerification.verificationSetup(service, phoneNumber);
+    	twilioVerification.verificationFetcher(service.getSid(), verification, phoneNumber);
+    	return service.getSid();
+    }
+    
+    public String verify(String serviceSid, String phoneNumber, String submittedCode) {
+    	TwilioVerification twilioVerification = new TwilioVerification();
+    	return twilioVerification.verificationCheck(serviceSid, phoneNumber, submittedCode);
+//  	verify the code that the user sends back
+    	
+	}
     
     // Verification Setup https://www.twilio.com/docs/verify/api/verification?code-sample=code-start-a-verification-with-sms&code-language=Java&code-sdk-version=7.x
-    public Verification verificationSetup(Service service, PhoneDto phoneDto) {
+    private Verification verificationSetup(Service service, String phoneNumber) {
     	Verification verification = Verification.creator(
     			service.getSid(),
-    			"+1" + phoneDto.getPhoneNumber(),
+    			"+1" + phoneNumber,
     			"sms")
     			.create();
-
-        System.out.println(verification.getSid());
         return verification;
     }
     
-    public Verification verificationFetcher(Service service,Verification verification, PhoneDto phoneDto) {
+    private Verification verificationFetcher(String serviceSid, Verification verification, String phoneNumber) {
     	verification = Verification.fetcher(
-    			service.getSid(),
-        		"+1" + phoneDto.getPhoneNumber())
+    			serviceSid,
+        		"+1" + phoneNumber)
     			.fetch();
-
-        System.out.println(verification.getStatus());
     	return verification;
     }
     
  // Verification check https://www.twilio.com/docs/verify/api/verification-check
-    public String verificationCheck(Service service, Verification verification, PhoneDto phoneDto) {
-    	String userCode = null;
-    	Scanner scanner = new Scanner(System.in);
-    	userCode = scanner.nextLine();
+    private String verificationCheck(String serviceSid, String phoneNumber, String submittedCode) {
     	VerificationCheck verificationCheck = VerificationCheck.creator(
-    			  service.getSid(),
-    			  userCode)
-    			  .setTo("+1" + phoneDto.getPhoneNumber()).create();
-
+    			  serviceSid,
+    			  submittedCode)
+    			  .setTo("+1" + phoneNumber)
+    			  .create();
     	System.out.println(verificationCheck.getStatus());
     	return verificationCheck.getStatus();
     }

@@ -18,13 +18,13 @@ import lombok.experimental.Accessors;
 @Table(name = "user")
 @Getter
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "userId")
 public class User {
 
 	@Id
 	@Type(type = "uuid-char")
 	@Column(name = "user_id")
-	private UUID id;
+	private UUID userId;
 	
 	@Column(name = "username")
 	private String username;
@@ -43,7 +43,7 @@ public class User {
 
 	public static User newInstance(String username) {
 		User user = new User();
-		user.id = UUID.randomUUID();
+		user.userId = UUID.randomUUID();
 		user.username = username;
 		return user;
 	}

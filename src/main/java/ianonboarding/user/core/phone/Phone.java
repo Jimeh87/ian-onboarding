@@ -41,17 +41,22 @@ public class Phone {
 	@Column(name = "verification_twilio")
 	@Setter
 	private Boolean verificationTwilio;
+	
+	@Column(name = "verification_sid")
+	@Setter
+	private String verificationSId;
 
 	Phone() {
 	}
 
-	public static Phone newInstance(UUID userId, String phoneNumber) {
+	public static Phone newInstance(UUID userId, String phoneNumber, Boolean primaryNumber, Boolean verificationTwilio, String verificationSId) {
 		Phone phone = new Phone();
 		phone.phoneId = UUID.randomUUID();
 		phone.userId = userId;
 		phone.phoneNumber = phoneNumber;
-		phone.primaryNumber = false;
-		phone.verificationTwilio = false;
+		phone.primaryNumber = primaryNumber;
+		phone.verificationTwilio = verificationTwilio;
+		phone.verificationSId = verificationSId;
 		return phone;
 	}
 }

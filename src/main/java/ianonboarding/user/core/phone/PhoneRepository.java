@@ -12,4 +12,5 @@ public interface PhoneRepository extends JpaRepository<Phone, UUID> {
 	public List<Phone> findPhonesByUserId(UUID userId);
 	
 	public boolean existsByPhoneId(UUID phoneId);
+	
 }

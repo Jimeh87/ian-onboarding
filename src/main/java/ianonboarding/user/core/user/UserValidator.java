@@ -32,7 +32,7 @@ public class UserValidator {
 			errors.put("username", "REQUIRED");
 		} else if (StringUtils.length(userDto.getUsername()) > 20) {
 			errors.put("username", "INVALID_LENGTH");
-		} else if (userService.userNameExists(userDto.getUsername(), userDto.getId())) {
+		} else if (userService.userNameExists(userDto.getUsername(), userDto.getUserId())) {
 			errors.put("username", "NOT_UNIQUE");
 		}
 

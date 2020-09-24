@@ -36,7 +36,7 @@ public class UserControllerTest {
 		UserDto createdUser = response.getBody();
 		assertNotNull(createdUser);
 		assertAll(
-				() -> assertNotNull(createdUser.getId(), "id"),
+				() -> assertNotNull(createdUser.getUserId(), "userId"),
 				() -> assertEquals(userDto.getUsername(), createdUser.getUsername(), "username"),
 				() -> assertEquals(userDto.getFirstName(), createdUser.getFirstName(), "firstName"),
 				() -> assertEquals(userDto.getLastName(), createdUser.getLastName(), "lastName")
@@ -65,10 +65,10 @@ public class UserControllerTest {
 				.setFirstName("Jaden")
 				.setLastName("Smith"));
 		
-		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
+		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getUserId(), UserDto.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
-		assertEquals(user.getId(), response.getBody().getId());
+		assertEquals(user.getUserId(), response.getBody().getUserId());
 	}
 	
 	@Test
@@ -96,9 +96,9 @@ public class UserControllerTest {
 				.setFirstName("Ian")
 				.setLastName("Quach"));
 		
-		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
-		restTemplate.put("/api/v1/users/" + user.getId(), user.setFirstName("Lloyd"));
-		response = restTemplate.getForEntity("/api/v1/users/" + user.getId(), UserDto.class);
+		ResponseEntity<UserDto> response = restTemplate.getForEntity("/api/v1/users/" + user.getUserId(), UserDto.class);
+		restTemplate.put("/api/v1/users/" + user.getUserId(), user.setFirstName("Lloyd"));
+		response = restTemplate.getForEntity("/api/v1/users/" + user.getUserId(), UserDto.class);
 		assertEquals(user.getFirstName(), response.getBody().getFirstName());
 	}
 	
@@ -112,7 +112,7 @@ public class UserControllerTest {
 		ResponseEntity<UserDto[]> response = restTemplate.getForEntity("/api/v1/users/", UserDto[].class); // Returns the user as a UserDto object
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody()); // make sure you're actually receiving the users/that they exist
-		restTemplate.delete("/api/v1/users/" + user.getId(), UserDto.class);
+		restTemplate.delete("/api/v1/users/" + user.getUserId(), UserDto.class);
 		response = restTemplate.getForEntity("/api/v1/users/", UserDto[].class);
 		assertEquals(0, response.getBody().length);
 	}

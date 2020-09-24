@@ -95,7 +95,7 @@ public class UserValidatorTest {
 				.setFirstName("Jaden")
 				.setLastName("Smith");
 		
-		when(userService.userNameExists(user.getUsername(), user.getId())).thenReturn(false);
+		when(userService.userNameExists(user.getUsername(), user.getUserId())).thenReturn(false);
 
 		user.setFirstName("Lloyd");
 		

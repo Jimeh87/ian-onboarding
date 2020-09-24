@@ -10,12 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.twilio.Twilio;
+import com.twilio.base.ResourceSet;
 import com.twilio.rest.verify.v2.Service;
-import com.twilio.rest.verify.v2.service.Verification;
 
 import ianonboarding.user.controller.phone.PhoneDto;
 import ianonboarding.user.controller.user.UserDto;
-import ianonboarding.user.verfication.TwilioVerification;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,33 +36,28 @@ public class TwilioVerificationTest {
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
 		ResponseEntity<PhoneDto> createdPhone = createPhone(createdUser.getBody(),new PhoneDto()
-				.setUserId(createdUser.getBody().getId())
-				.setPhoneNumber("REAL_PHONE_NUMBER") // add that in if running the test
+				.setUserId(createdUser.getBody().getUserId())
+				.setPhoneNumber("3065517518") // add that in if running the test
 				.setPrimaryNumber(true));
-		
 		ResponseEntity<PhoneDto> phoneResponse = createdPhone;
 		assertEquals(HttpStatus.CREATED, phoneResponse.getStatusCode());
 		
-		TwilioVerification twilioVerification = new TwilioVerification();
-		Service service = twilioVerification.serviceInit();
-		Verification verification = twilioVerification.verificationSetup(service, createdPhone.getBody());
-		verification = twilioVerification.verificationFetcher(service, verification, createdPhone.getBody());
+//		ResponseEntity<PhoneDto> createdPhone2 = createPhone(createdUser.getBody(),new PhoneDto()
+//				.setUserId(createdUser.getBody().getId())
+//				.setPhoneNumber("3065508233") // add that in if running the test
+//				.setPrimaryNumber(true));
+//		ResponseEntity<PhoneDto> phoneResponse2 = createdPhone2;
+//		assertEquals(HttpStatus.CREATED, phoneResponse2.getStatusCode());
+//		ResponseEntity<PhoneDto[]> phoneResponse3 = restTemplate.getForEntity("/api/v1/users/" + createdUser.getBody().getId() + "/phones/", PhoneDto[].class);
 		
-		if(twilioVerification.verificationCheck(service, verification, createdPhone.getBody()).equals("approved")) {
-			restTemplate.put("/api/v1/users/" + createdUser.getBody().getId() + "/phones/" + createdPhone.getBody().getPhoneId()
-					, createdPhone.getBody().setVerificationTwilio(true));
-		} else {
-			restTemplate.put("/api/v1/users/" + createdUser.getBody().getId() + "/phones/" + createdPhone.getBody().getPhoneId()
-					, createdPhone.getBody().setVerificationTwilio(false));
-		}
 		assertEquals(true,createdPhone.getBody().getVerificationTwilio());
-		
+//		assertEquals(true,createdPhone2.getBody().getVerificationTwilio());
 	}
 	
 	private ResponseEntity<UserDto> createUser(UserDto userDto) {
 		return restTemplate.postForEntity("/api/v1/users", userDto, UserDto.class);
 	}
 	private ResponseEntity<PhoneDto> createPhone(UserDto userDto, PhoneDto phoneDto) {
-		return restTemplate.postForEntity("/api/v1/users/" + userDto.getId() + "/phones", phoneDto, PhoneDto.class);
+		return restTemplate.postForEntity("/api/v1/users/" + userDto.getUserId() + "/phones", phoneDto, PhoneDto.class);
 	}
 }
