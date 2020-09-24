@@ -1,0 +1,24 @@
+<h2>User Details</h2> 
+
+<hr/>
+<div *ngIf="user">
+    <div>
+        <label><b>User ID: </b></label> {{user.userId}}
+    </div>
+    <div>
+        <label><b>Username: </b></label> {{user.username}}
+    </div>
+    <div>
+        <label><b>First Name: </b></label> {{user.firstName}}
+    </div>
+    <div>
+        <label><b>Last Name: </b></label> {{user.lastName}}
+    </div>
+</div>
+
+<td>
+    <button (click)="list()" class="btn btn-primary">Back to User List</button>
+    <button (click)="updateUser(user.userId)" class="btn btn-info" style="margin-left: 10px">Update User</button>
+    <button (click)="phoneList(user.userId)" class="btn btn-info" style="margin-left: 10px">Show Phones</button>
+    <button (click)="createPhone(user.userId)" class="btn btn-info" style="margin-left: 10px">Add Phone</button>
+</td>

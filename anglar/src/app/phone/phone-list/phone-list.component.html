@@ -1,0 +1,29 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2>Phone List</h2>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>PhoneId</th>
+            <th>UserId</th>
+            <th>Phone Number</th>
+            <th>Primary Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let phone of phones | async">
+            <td>{{phone.phoneId}}</td>
+            <td>{{phone.userId}}</td>
+            <td>{{phone.phoneNumber}}</td>
+            <td>{{phone.primaryNumber}}</td>
+            <td>
+                <button (click)="deletePhone(phone.phoneId)" class="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
